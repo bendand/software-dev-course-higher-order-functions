@@ -44,6 +44,12 @@ Step-by-Step:
 3. Return the filtered result.
 */
 
+function filterProducts(productArray, callback) {
+  return productArray.filter(callback);
+}
+
+// Example: Filter products with price less than or equal to $500
+const filteredProducts = filterProducts(products, (product) => product.price <= 500);
 
 /*
 🔹 Task 2: Transform Product Names
@@ -56,6 +62,10 @@ Step-by-Step:
 3. Store the result in a new variable.
 */
 
+const upperCased = products.map(product => ({
+  ...product, 
+  name: product.name.toUpperCase()
+}));
 
 /*
 🔹 Task 3: Generate Discounted Prices
@@ -70,6 +80,24 @@ Step-by-Step:
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
 
+function applyDiscount(discountPercent) {
+  // Return a function that calculates the final price after discount
+  return function calculateFinalPrice(price) {
+    const discountAmount = (price / 100) * discountPercent;
+    return price - discountAmount;
+  };
+}
+
+// Create a discount function with 10% discount
+const applyTenPercentDiscount = applyDiscount(10);
+
+// Apply the discount to all product prices
+const discountedProducts = products.map(product => ({
+  ...product, 
+  price: applyTenPercentDiscount(product.price)
+}));
+
+
 
 /*
 🔹 Task 4: Calculate Total Inventory Value
@@ -82,12 +110,20 @@ Step-by-Step:
 3. Store the total in a new variable.
 */
 
+// Calculate the total value of in-stock products
+const totalValue = products.reduce((accumulator, product) => { 
+  if (product.inStock) {
+    return accumulator + product.price; 
+  }
+  return accumulator;
+}, 0);
+
 
 // ============================================
 // 🧪 Console Test Your Work
 // ============================================
 
-// console.log("Filtered products:", ...);
-// console.log("Uppercased names:", ...);
-// console.log("Discounted products:", ...);
-// console.log("Total value in stock:", ...);
+console.log("Filtered products:", filteredProducts);
+console.log("Uppercased names:", upperCased);
+console.log("Discounted products:", discountedProducts);
+console.log("Total value in stock:", totalValue);
